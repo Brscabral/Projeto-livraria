@@ -4,8 +4,8 @@ app.use(express.json())
 
 
 const livros=[
-    {id : 1, "Titulo:": "Senhor dos aneis"},
-    {id : 2, "Titulo:": "O Hobbit"}
+    {id : 1, "titulo:": "Senhor dos aneis"},
+    {id : 2, "titulo:": "O Hobbit"}
 ]
 
 app.get('/', (req,res) =>{
@@ -19,4 +19,21 @@ app.post('/livros', (req,res) =>{
     livros.push(req.body)
     res.status(201).send("Livro cadastrado com sucesso!")
 })
+app.put('/livros/:id', (req,res) =>{
+    let id = buscaLivros(req.params.id)
+    livros[id].titulo = req.body.titulo
+    res.json(livros)
+
+})
+app.delete('/livros/:id', (req, res) =>{
+    let {id} = req.params
+    let index = buscaLivros(id)
+    livros.splice(index, 1)
+    res.send(`O livro ${index} foi removido da lista`)
+})
+
+function buscaLivros(id){
+return livros.findIndex(livro => livro.id == id)
+}
+
 export default app
